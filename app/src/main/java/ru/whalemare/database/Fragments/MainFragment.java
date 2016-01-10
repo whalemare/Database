@@ -80,8 +80,10 @@ public class MainFragment extends Fragment{
                 else
                 {
                     Log.d(TAG, "0 столбцов таблицы");
-                    Toast.makeText(getActivity().getApplicationContext(), "Таблица пуста", Toast.LENGTH_SHORT);
+                    Toast.makeText(getActivity().getApplicationContext(), "Таблица пуста", Toast.LENGTH_SHORT).show();
                 }
+
+
 
                 cursor.close();
             }
@@ -107,6 +109,6 @@ public class MainFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main_fragment_page, container, false);
+        return inflater.inflate(R.layout.main_fragment, container, false);
     }
 }

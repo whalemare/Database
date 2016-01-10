@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import ru.whalemare.database.Adapters.ViewPagerAdapter;
+import ru.whalemare.database.Fragments.ListFragment;
 import ru.whalemare.database.Fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager){
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MainFragment(), "Главная");
-       // adapter.addFragment(new MainFragment(), "Список");
+        adapter.addFragment(new ListFragment(), "Список");
         viewPager.setAdapter(adapter);
     }
 }

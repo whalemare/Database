@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="ru.whalemare.database.MainActivity">
 
     <android.support.design.widget.CoordinatorLayout
@@ -16,7 +15,8 @@
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -32,46 +32,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 />
-
-            <android.support.v4.view.ViewPager
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:layout_weight="1"
-                android:background="@color/background"
-                android:id="@+id/viewpager">
-
-            </android.support.v4.view.ViewPager>
-
-
         </android.support.design.widget.AppBarLayout>
 
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:id="@+id/viewpager"
+            android:layout_alignParentTop="true">
+        </android.support.v4.view.ViewPager>
+
     </android.support.design.widget.CoordinatorLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add"
-        android:src="@mipmap/ic_database"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="30dp"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_search"
-        android:src="@mipmap/ic_magnify"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="30dp"
-        android:layout_centerHorizontal="true" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_delete"
-        android:src="@mipmap/ic_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
