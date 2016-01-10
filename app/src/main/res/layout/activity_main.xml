@@ -30,7 +30,18 @@
                 android:id="@+id/tab_layout"
                 android:background="@color/primary_light"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
+
+            <android.support.v4.view.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                android:layout_weight="1"
+                android:background="@color/background"
+                android:id="@+id/viewpager">
+
+            </android.support.v4.view.ViewPager>
+
 
         </android.support.design.widget.AppBarLayout>
 
@@ -39,7 +50,6 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add"
         android:src="@mipmap/ic_database"
-        android:onClick="onClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -49,7 +59,6 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_search"
         android:src="@mipmap/ic_magnify"
-        android:onClick="onClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -59,22 +68,10 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_delete"
         android:src="@mipmap/ic_delete"
-        android:onClick="onClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:hint="Подсказка"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:autoText="false"
-        android:enabled="true"
-        android:id="@+id/editText" />
 
 </RelativeLayout>
