@@ -101,7 +101,7 @@ public class MainFragment extends Fragment{
         View.OnClickListener clickDelete = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity().getApplicationContext(), "Удаление", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), "Удаление записи из БД", Toast.LENGTH_SHORT).show();
             }
         };
 

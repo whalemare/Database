@@ -22,7 +22,7 @@ import ru.whalemare.database.R;
 
 public class ListFragment extends Fragment {
     private final String TAG = "WHALETAG";
-    private FloatingActionButton fabRefresh;
+    private FloatingActionButton fabRefresh, fabDelete;
 
     private DBhelper dbHelper;
 
@@ -35,8 +35,10 @@ public class ListFragment extends Fragment {
     public void onStart() {
         super.onStart();
         fabRefresh = (FloatingActionButton) getActivity().findViewById(R.id.fab_list_refresh);
+        fabDelete = (FloatingActionButton) getActivity().findViewById(R.id.fab_list_delete);
 
         fabRefresh.setOnClickListener(clickRefresh);
+        fabDelete.setOnClickListener(clickDelete);
 
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -75,6 +77,16 @@ public class ListFragment extends Fragment {
             adapter = new ListAdapter(getActivity().getApplicationContext(), names, recyclerView);
             recyclerView.setAdapter(adapter);
             cursor.close();
+        }
+    };
+
+
+    View.OnClickListener clickDelete = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            final SQLiteDatabase db = dbHelper.getWritableDatabase(); // подключаемся к бд
+            Toast.makeText(getActivity().getApplicationContext(), "Удаляем все записи в БД", Toast.LENGTH_SHORT).show();
+            db.delete("mytable", null, null);
         }
     };
 

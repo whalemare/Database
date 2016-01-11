@@ -9,10 +9,11 @@ public class DBhelper extends SQLiteOpenHelper {
 
     private static final String TAG = "WHALETAG";
     public static final String DATABASE_NAME = "myDB";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String DATABASE_TABLE = "mytable";
     public static final String NAME_COLUMN = "name";
+    public static final String DATA_COLUMN = "data";
     private static final String DATABASE_CREATE_SCRIPT = "create table " + DATABASE_TABLE + " ("
                                             + "id integer primary key autoincrement,"
                                             + NAME_COLUMN + "text not null);";
@@ -32,7 +33,14 @@ public class DBhelper extends SQLiteOpenHelper {
 
         Log.d(TAG, "Производится обновление БД с версии " + oldVersion + ", на версию " + newVersion);
 
-        db.execSQL("DROP TABLE IF IT EXIST " + DATABASE_NAME); // удаляем старую таблицу
-        onCreate(db); // создаем новую. А как же данные?
+        updateDatabase(db, oldVersion, newVersion);
+    }
+
+    private void updateDatabase(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 1)
+            db.execSQL(DATABASE_CREATE_SCRIPT);
+
+        if (oldVersion < 2)
+            db.execSQL("ALTER TABLE mytable ADD COLUMN data TEXT");
     }
 }
