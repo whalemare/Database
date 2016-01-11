@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">База Данных</string>
+    <string name="key">Введите ключ записи</string>
 </resources>

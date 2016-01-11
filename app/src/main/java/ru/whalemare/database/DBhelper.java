@@ -8,12 +8,12 @@ import android.util.Log;
 public class DBhelper extends SQLiteOpenHelper {
 
     private static final String TAG = "WHALETAG";
-    private static final String DATABASE_NAME = "myDB";
+    public static final String DATABASE_NAME = "myDB";
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_TABLE = "mytable";
-    private static final String NAME_COLUMN = "name";
-    public static final String DATABASE_CREATE_SCRIPT = "create table " + DATABASE_TABLE + " ("
+    public static final String DATABASE_TABLE = "mytable";
+    public static final String NAME_COLUMN = "name";
+    private static final String DATABASE_CREATE_SCRIPT = "create table " + DATABASE_TABLE + " ("
                                             + "id integer primary key autoincrement,"
                                             + NAME_COLUMN + "text not null);";
 

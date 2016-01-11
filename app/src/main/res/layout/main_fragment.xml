@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:hint="Подсказка"
+        android:hint="@string/key"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:gravity="center"

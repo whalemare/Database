@@ -19,14 +19,19 @@ import ru.whalemare.database.R;
 
 public class MainFragment extends Fragment{
 
-    private final String TAG = "WHALETAG";
+    private final String TAG = "WHALETAG"; // строка для отладки, чтобы можно было отделять наши данные от других
 
-    EditText editText;
-    FloatingActionButton fabAdd, fabSearch, fabDelete;
-    DBhelper dbHelper;
+    EditText editText; // строка с редактируемым текстом. Сюда будут заноситься данные
+    FloatingActionButton fabAdd, fabSearch, fabDelete; // кнопки: добавить, найти, удалить
+    DBhelper dbHelper; // объект помощника БД
 
     public MainFragment() {}
 
+    /**
+     *  Метод, который запускается при старте фрагмента.
+     *  В нем каждому объекту view ставится в соответствие ссылка на объект из layout файла.
+     *
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -34,7 +39,6 @@ public class MainFragment extends Fragment{
         fabAdd = (FloatingActionButton) getActivity().findViewById(R.id.fab_add);
         fabSearch = (FloatingActionButton) getActivity().findViewById(R.id.fab_search);
         fabDelete = (FloatingActionButton) getActivity().findViewById(R.id.fab_delete);
-
 
         dbHelper = new DBhelper(getActivity().getApplicationContext());
         final ContentValues cv = new ContentValues(); // объект для данных
@@ -45,47 +49,35 @@ public class MainFragment extends Fragment{
             public void onClick(View view) {
                 String name = editText.getText().toString();
                 if (name.equals("") || name.equals(null))
-                {
                     Toast.makeText(getActivity().getApplicationContext(), "Сначала введите данные", Toast.LENGTH_SHORT).show();
-                    return;
+                else {
+                    Log.d(TAG, ">> Производим запись.");
+                    cv.put("name", name);
+                    long rowID = db.insert("mytable", null, cv);
+                    Log.d(TAG, "ID столбца: " + rowID);
+                    Toast.makeText(getActivity().getApplicationContext(), name, Toast.LENGTH_SHORT).show();
                 }
-                Log.d(TAG, ">> Производим запись.");
-                cv.put("name", name);
-                long rowID = db.insert("mytable", null, cv);
-                Log.d(TAG, "ID столбца: " + rowID);
-                Toast.makeText(getActivity().getApplicationContext(), name, Toast.LENGTH_SHORT).show();
             }
         };
 
         View.OnClickListener clickSearch = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, ">> Производим поиск.");
-                Toast.makeText(getActivity().getApplicationContext(), "Поиск по БД", Toast.LENGTH_SHORT).show();
-                // делаем запрос всех данных из mytable и получаем Cursor
-                Cursor cursor = db.query("mytable", null, null, null, null, null, null);
+                String name = editText.getText().toString();
 
-                if (cursor.moveToFirst()) // ставим позицию курсора на 1 строку выборки. Если строк нет = false
-                {
-                    // определеяем  номера столбцов по имени
-                    int idColumnIndex = cursor.getColumnIndex("id");
-                    int nameColumnIndex = cursor.getColumnIndex("name");
-
-                    do { // получаем значения по номерам столбцов
-                        Log.d(TAG, "ID = " + cursor.getInt(idColumnIndex) + "; " +
-                                "Key = " + cursor.getString(nameColumnIndex));
-                    } while (cursor.moveToNext());
-
+                if (name.equals("") || name.equals(null))
+                    Toast.makeText(getActivity().getApplicationContext(), "Введите данные для поиска", Toast.LENGTH_SHORT).show();
+                else {
+                    Log.d(TAG, ">> Производим поиск по ключу " + name);
+                    Toast.makeText(getActivity().getApplicationContext(), "Поиск по БД", Toast.LENGTH_SHORT).show();
+                    // делаем запрос всех данных из mytable и получаем Cursor
+                    String queryFind = "SELECT name FROM mytable WHERE name LIKE \"%" + name +"%\"";
+                    Cursor cursor = db.rawQuery(queryFind, new String[] {});
+                    Log.d(TAG, "Поиск по ключу завершен. Начинаем писать в лог");
+                    logCursor(cursor); // выводим все в лог
+                    Log.d(TAG, "Написали в лог");
+                    cursor.close();
                 }
-                else
-                {
-                    Log.d(TAG, "0 столбцов таблицы");
-                    Toast.makeText(getActivity().getApplicationContext(), "Таблица пуста", Toast.LENGTH_SHORT).show();
-                }
-
-
-
-                cursor.close();
             }
         };
 
@@ -101,7 +93,6 @@ public class MainFragment extends Fragment{
         fabDelete.setOnClickListener(clickDelete);
     }
 
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -110,5 +101,20 @@ public class MainFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.main_fragment, container, false);
+    }
+
+    private void logCursor(Cursor c){
+        if (c != null){
+            if (c.moveToFirst()) {
+                String string;
+                do {
+                    string = "";
+                    for (String cn : c.getColumnNames())
+                        string = string.concat(cn + " = " + c.getString(c.getColumnIndex(cn)) + "; ");
+                    Log.d(TAG, string);
+                } while (c.moveToNext());
+            }
+        } else
+            Log.d(TAG, "Курсор пустой");
     }
 }
