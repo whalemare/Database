@@ -76,7 +76,7 @@ public class MainFragment extends Fragment{
                     Log.d(TAG, ">> Производим поиск по ключу " + name);
                     Toast.makeText(getActivity().getApplicationContext(), "Поиск по БД", Toast.LENGTH_SHORT).show();
                     // делаем запрос всех данных из mytable и получаем Cursor
-                    String queryFind = "SELECT name FROM mytable WHERE name LIKE \"%" + name +"%\"";
+                    String queryFind = "SELECT name FROM mytable WHERE name = \'" + name +"\'";
                     Cursor cursor = db.rawQuery(queryFind, new String[] {});
 
                     ArrayList<String> strings;
