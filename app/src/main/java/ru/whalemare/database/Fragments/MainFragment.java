@@ -1,5 +1,6 @@
 package ru.whalemare.database.Fragments;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,8 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import ru.whalemare.database.DBhelper;
 import ru.whalemare.database.R;
@@ -73,9 +78,21 @@ public class MainFragment extends Fragment{
                     // делаем запрос всех данных из mytable и получаем Cursor
                     String queryFind = "SELECT name FROM mytable WHERE name LIKE \"%" + name +"%\"";
                     Cursor cursor = db.rawQuery(queryFind, new String[] {});
-                    Log.d(TAG, "Поиск по ключу завершен. Начинаем писать в лог");
-                    logCursor(cursor); // выводим все в лог
-                    Log.d(TAG, "Написали в лог");
+
+                    ArrayList<String> strings;
+                    strings = logCursor(cursor); // выводим все в лог
+
+                    // Вывод диалога
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
+                    View convertView = (View) inflater.inflate(R.layout.list_view, null);
+                    alertDialog.setView(convertView);
+                    alertDialog.setTitle("Список");
+                    ListView lv = (ListView) convertView.findViewById(R.id.listview);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), R.layout.list_item, strings);
+                    lv.setAdapter(adapter);
+                    alertDialog.show();
+
                     cursor.close();
                 }
             }
@@ -103,18 +120,21 @@ public class MainFragment extends Fragment{
         return inflater.inflate(R.layout.main_fragment, container, false);
     }
 
-    private void logCursor(Cursor c){
+    private ArrayList<String> logCursor(Cursor c){
+        ArrayList<String> strings = new ArrayList<>();
         if (c != null){
             if (c.moveToFirst()) {
                 String string;
                 do {
                     string = "";
                     for (String cn : c.getColumnNames())
-                        string = string.concat(cn + " = " + c.getString(c.getColumnIndex(cn)) + "; ");
+                        string = string.concat(c.getString(c.getColumnIndex(cn)));
                     Log.d(TAG, string);
+                    strings.add(string);
                 } while (c.moveToNext());
             }
         } else
             Log.d(TAG, "Курсор пустой");
+        return strings;
     }
 }
