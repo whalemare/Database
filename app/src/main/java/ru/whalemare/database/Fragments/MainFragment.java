@@ -52,16 +52,39 @@ public class MainFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 String name = editText.getText().toString();
-                if (name.equals("") || name.equals(null))
+                if (name.equals("") || name.equals(null)) {
                     Toast.makeText(getActivity().getApplicationContext(), "Сначала введите данные", Toast.LENGTH_SHORT).show();
-                else {
+                    return;
+                }
+
+                // Произведем поиск по БД и найдем запись с таким же ключом
+                Cursor cursor = db.rawQuery("SELECT name FROM mytable WHERE name=\'" + name +"\'", new String[]{});
+                if (cursor != null)
+                {
+                    if (cursor.moveToFirst())
+                    {
+                        String string;
+                        do {
+                            string = "";
+                            for (String cn : cursor.getColumnNames())
+                                string = "Данные: " + cursor.getString(cursor.getColumnIndex(cn));
+                            Log.d(TAG, "Строка введенная: " + name + ". Cтрока на проверке: " + string);
+                            if (("Данные: " + name).equals(string))
+                            {
+                                Log.d(TAG, "Такой ключ записи в БД уже есть, ввод невозможен");
+                                Toast.makeText(getActivity().getApplicationContext(), "Такой ключ записи в БД уже есть, ввод невозможен", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        } while (cursor.moveToNext());
+                    }
+                }
+
                     Log.d(TAG, ">> Производим запись.");
                     cv.put("name", name);
                     cv.put("data", "Данные: " + name.concat(name));
                     long rowID = db.insert("mytable", null, cv);
                     Log.d(TAG, "ID столбца: " + rowID);
-                    Toast.makeText(getActivity().getApplicationContext(), name, Toast.LENGTH_SHORT).show();
-                }
+                    Toast.makeText(getActivity().getApplicationContext(), "Данные успешно добавлены в БД", Toast.LENGTH_SHORT).show();
             }
         };
 
