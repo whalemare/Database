@@ -34,8 +34,7 @@ public class MainFragment extends Fragment{
 
     /**
      *  Метод, который запускается при старте фрагмента.
-     *  В нем каждому объекту view ставится в соответствие ссылка на объект из layout файла.
-     *
+     *  В нем каждому объекту view ставится в соответствие ссылка на объект из layout файлам
      */
     @Override
     public void onStart() {
@@ -58,6 +57,7 @@ public class MainFragment extends Fragment{
                 else {
                     Log.d(TAG, ">> Производим запись.");
                     cv.put("name", name);
+                    cv.put("data", "Данные: " + name.concat(name));
                     long rowID = db.insert("mytable", null, cv);
                     Log.d(TAG, "ID столбца: " + rowID);
                     Toast.makeText(getActivity().getApplicationContext(), name, Toast.LENGTH_SHORT).show();
@@ -120,6 +120,12 @@ public class MainFragment extends Fragment{
         return inflater.inflate(R.layout.main_fragment, container, false);
     }
 
+    /**
+     * Функция для удобного вывода в лог информации по курсору. + возвращает строки являющиеся данными
+     * индексов.
+     * @param c курсор. С его помощью осуществляется получение данных из SQLite
+     * @return strings - список строк с данными.
+     */
     private ArrayList<String> logCursor(Cursor c){
         ArrayList<String> strings = new ArrayList<>();
         if (c != null){
@@ -128,7 +134,7 @@ public class MainFragment extends Fragment{
                 do {
                     string = "";
                     for (String cn : c.getColumnNames())
-                        string = string.concat(c.getString(c.getColumnIndex(cn)));
+                        string = "Данные: " + c.getString(c.getColumnIndex(cn));
                     Log.d(TAG, string);
                     strings.add(string);
                 } while (c.moveToNext());

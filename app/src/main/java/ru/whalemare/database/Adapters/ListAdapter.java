@@ -25,14 +25,24 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         this.recyclerView = recyclerView;
     }
 
+    ArrayList<Integer> ids = new ArrayList<>(names.size());
+    private void getId()
+    {
+        for (int i=0; i<names.size(); i++)
+            ids.add(i);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView name;
+        public TextView name; // key
+        public TextView id; // p
         private ItemClickListener clickListener;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            getId(); // создадим список ID
             name = (TextView) itemView.findViewById(R.id.textView_name);
+            id = (TextView) itemView.findViewById(R.id.textView_id);
             itemView.setTag(itemView);
             itemView.setOnClickListener(this);
         }
@@ -59,13 +69,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ListAdapter.ViewHolder holder, int position) {
         holder.name.setText(names.get(position)); // установка текста
+        holder.id.setText(ids.get(position).toString()); // установка номера
 
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
                 if (!isLongClick)
                 {
-                    Toast.makeText(context, "#" + position + " - " + names.get(position), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "#" + position + " - " + "Данные: " + names.get(position), Toast.LENGTH_SHORT).show();
                     recyclerView.scrollBy(50, 0);
                 }
             }
