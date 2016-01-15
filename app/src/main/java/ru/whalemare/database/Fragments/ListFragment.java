@@ -22,26 +22,23 @@ import ru.whalemare.database.R;
 
 public class ListFragment extends Fragment {
     private final String TAG = "WHALETAG";
-    private FloatingActionButton fabRefresh, fabDelete;
-
     private DBhelper dbHelper;
 
     public static RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
 
     public ListFragment() {}
 
     @Override
     public void onStart() {
         super.onStart();
-        fabRefresh = (FloatingActionButton) getActivity().findViewById(R.id.fab_list_refresh);
-        fabDelete = (FloatingActionButton) getActivity().findViewById(R.id.fab_list_delete);
+        FloatingActionButton fabRefresh = (FloatingActionButton) getActivity().findViewById(R.id.fab_list_refresh);
+        FloatingActionButton fabDelete = (FloatingActionButton) getActivity().findViewById(R.id.fab_list_delete);
 
         fabRefresh.setOnClickListener(clickRefresh);
         fabDelete.setOnClickListener(clickDelete);
 
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.recyclerView);
-        layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
     }
 

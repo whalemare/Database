@@ -1,4 +1,4 @@
-package ru.whalemare.database;
+package ru.whalemare.database.Hash;
 
 public class HashMap {
 
