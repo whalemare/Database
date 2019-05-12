@@ -9,16 +9,19 @@ public class DBhelper extends SQLiteOpenHelper {
 
     private static final String TAG = "WHALETAG";
     public static final String DATABASE_NAME = "myDB";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public static final String DATABASE_TABLE = "mytable";
     public static final String NAME_COLUMN = "name";
     public static final String DATA_COLUMN = "data";
-    private static final String DATABASE_CREATE_SCRIPT = "create table " + DATABASE_TABLE + " ("
-                                            + "id integer primary key autoincrement,"
-                                            + NAME_COLUMN + "text not null);";
+    private static final String DATABASE_CREATE_SCRIPT = "create table " + DATABASE_TABLE
+        + " ("
+        + "id integer primary key autoincrement, "
+        + NAME_COLUMN + " text not null, "
+        + DATA_COLUMN + " text"
+        + ");";
 
-    public DBhelper (Context context){
+    public DBhelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -30,7 +33,6 @@ public class DBhelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
         Log.d(TAG, "Производится обновление БД с версии " + oldVersion + ", на версию " + newVersion);
 
         updateDatabase(db, oldVersion, newVersion);
