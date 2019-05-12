@@ -5,10 +5,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
+        android:paddingTop="52dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical">
-    </android.support.v7.widget.RecyclerView>
+        android:scrollbars="vertical"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_list_delete"

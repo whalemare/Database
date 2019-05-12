@@ -26,7 +26,8 @@ public class ListFragment extends Fragment {
 
     public static RecyclerView recyclerView;
 
-    public ListFragment() {}
+    public ListFragment() {
+    }
 
     @Override
     public void onStart() {
@@ -34,58 +35,50 @@ public class ListFragment extends Fragment {
         FloatingActionButton fabRefresh = (FloatingActionButton) getActivity().findViewById(R.id.fab_list_refresh);
         FloatingActionButton fabDelete = (FloatingActionButton) getActivity().findViewById(R.id.fab_list_delete);
 
-        fabRefresh.setOnClickListener(clickRefresh);
-        fabDelete.setOnClickListener(clickDelete);
+        fabRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dbHelper = new DBhelper(getActivity().getApplicationContext());
+                final SQLiteDatabase db = dbHelper.getWritableDatabase(); // подключаемся к бд
+
+                Log.d(TAG, "Обновление данных");
+                ArrayList<String> names = new ArrayList<>();
+
+                Cursor cursor = db.query("mytable", null, null, null, null, null, null);
+                if (cursor.moveToFirst()) {// ставим позицию курсора на 1 строку выборки. Если строк нет = false
+                    // определеяем  номера столбцов по имени
+                    int idColumnIndex = cursor.getColumnIndex("id");
+                    int nameColumnIndex = cursor.getColumnIndex("name");
+
+                    do { // получаем значения по номерам столбцов
+                        Log.d(TAG, "ID = " + cursor.getInt(idColumnIndex) + "; " +
+                            "Key = " + cursor.getString(nameColumnIndex));
+                        names.add(cursor.getString(nameColumnIndex)); // добавили строку в список
+                    } while (cursor.moveToNext());
+                } else {
+                    Log.d(TAG, "0 столбцов таблицы");
+                    Toast.makeText(getActivity().getApplicationContext(), "Таблица пуста", Toast.LENGTH_SHORT).show();
+                }
+
+                RecyclerView.Adapter adapter;
+                adapter = new ListAdapter(getActivity().getApplicationContext(), names, recyclerView);
+                recyclerView.setAdapter(adapter);
+                cursor.close();
+            }
+        });
+        fabDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final SQLiteDatabase db = dbHelper.getWritableDatabase(); // подключаемся к бд
+                Toast.makeText(getActivity().getApplicationContext(), "Удаляем все записи в БД", Toast.LENGTH_SHORT).show();
+                db.delete("mytable", null, null);
+            }
+        });
 
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.recyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
     }
-
-    View.OnClickListener clickRefresh = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            dbHelper = new DBhelper(getActivity().getApplicationContext());
-            final SQLiteDatabase db = dbHelper.getWritableDatabase(); // подключаемся к бд
-
-            Log.d(TAG, "Обновление данных");
-            ArrayList<String> names = new ArrayList<>();
-
-            Cursor cursor = db.query("mytable", null, null, null, null, null, null);
-            if (cursor.moveToFirst()) // ставим позицию курсора на 1 строку выборки. Если строк нет = false
-            {
-                // определеяем  номера столбцов по имени
-                int idColumnIndex = cursor.getColumnIndex("id");
-                int nameColumnIndex = cursor.getColumnIndex("name");
-
-                do { // получаем значения по номерам столбцов
-                    Log.d(TAG, "ID = " + cursor.getInt(idColumnIndex) + "; " +
-                            "Key = " + cursor.getString(nameColumnIndex));
-                    names.add(cursor.getString(nameColumnIndex)); // добавили строку в список
-                } while (cursor.moveToNext());
-            }
-            else
-            {
-                Log.d(TAG, "0 столбцов таблицы");
-                Toast.makeText(getActivity().getApplicationContext(), "Таблица пуста", Toast.LENGTH_SHORT).show();
-            }
-
-            RecyclerView.Adapter adapter;
-            adapter = new ListAdapter(getActivity().getApplicationContext(), names, recyclerView);
-            recyclerView.setAdapter(adapter);
-            cursor.close();
-        }
-    };
-
-
-    View.OnClickListener clickDelete = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            final SQLiteDatabase db = dbHelper.getWritableDatabase(); // подключаемся к бд
-            Toast.makeText(getActivity().getApplicationContext(), "Удаляем все записи в БД", Toast.LENGTH_SHORT).show();
-            db.delete("mytable", null, null);
-        }
-    };
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
