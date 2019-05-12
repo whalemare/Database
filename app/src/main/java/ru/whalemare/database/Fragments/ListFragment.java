@@ -24,7 +24,8 @@ public class ListFragment extends Fragment {
     private final String TAG = "WHALETAG";
     private DBhelper dbHelper;
 
-    public static RecyclerView recyclerView;
+    public RecyclerView recyclerView;
+    public ListAdapter adapter;
 
     public ListFragment() {
     }
@@ -34,6 +35,7 @@ public class ListFragment extends Fragment {
         super.onStart();
         FloatingActionButton fabRefresh = (FloatingActionButton) getActivity().findViewById(R.id.fab_list_refresh);
         FloatingActionButton fabDelete = (FloatingActionButton) getActivity().findViewById(R.id.fab_list_delete);
+        FloatingActionButton fabShuffle = (FloatingActionButton) getActivity().findViewById(R.id.fab_shuffle);
 
         fabRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,9 +62,7 @@ public class ListFragment extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(), "Таблица пуста", Toast.LENGTH_SHORT).show();
                 }
 
-                RecyclerView.Adapter adapter;
-                adapter = new ListAdapter(getActivity().getApplicationContext(), names, recyclerView);
-                recyclerView.setAdapter(adapter);
+                adapter.setItems(names);
                 cursor.close();
             }
         });
@@ -74,9 +74,17 @@ public class ListFragment extends Fragment {
                 db.delete("mytable", null, null);
             }
         });
+        fabShuffle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.shuffle();
+            }
+        });
 
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.recyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        adapter = new ListAdapter(getActivity().getApplicationContext(), new ArrayList<String>(), recyclerView);
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
     }
 
